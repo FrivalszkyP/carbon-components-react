@@ -12,85 +12,153 @@ import { settings } from 'carbon-components';
 
 const { prefix } = settings;
 
-const TextInput = ({
-  labelText,
-  className = `${prefix}--text__input`,
-  id,
-  placeholder,
-  type,
-  onChange,
-  onClick,
-  hideLabel,
-  invalid,
-  invalidText,
-  helperText,
-  light,
-  forwardRef: ref,
-  ...other
-}) => {
-  const textInputProps = {
-    id,
-    onChange: evt => {
-      if (!other.disabled) {
-        onChange(evt);
-      }
-    },
-    onClick: evt => {
-      if (!other.disabled) {
-        onClick(evt);
-      }
-    },
-    placeholder,
-    type,
-    ref,
-  };
+class TextInput extends React.Component {
+  getInput() {
+    const other = this.getInputFieldProps();
+    const textInputProps = this.getTextInputProps();
+    const errorProps = this.getErrorProps();
 
-  const errorId = id + '-error-msg';
-  const textInputClasses = classNames(`${prefix}--text-input`, className, {
-    [`${prefix}--text-input--light`]: light,
-  });
-  const labelClasses = classNames(`${prefix}--label`, {
-    [`${prefix}--visually-hidden`]: hideLabel,
-  });
-
-  const label = labelText ? (
-    <label htmlFor={id} className={labelClasses}>
-      {labelText}
-    </label>
-  ) : null;
-
-  const error = invalid ? (
-    <div className={`${prefix}--form-requirement`} id={errorId}>
-      {invalidText}
-    </div>
-  ) : null;
-
-  const input = invalid ? (
-    <input
+    return <input
       {...other}
       {...textInputProps}
-      data-invalid
-      aria-invalid
-      aria-describedby={errorId}
-      className={textInputClasses}
-    />
-  ) : (
-    <input {...other} {...textInputProps} className={textInputClasses} />
-  );
+      {...errorProps}
+    />;
+  }
 
-  const helper = helperText ? (
-    <div className={`${prefix}--form__helper-text`}>{helperText}</div>
-  ) : null;
+  getInputFieldProps() {
+    /* eslint-disable no-unused-vars */
+    const {
+      className,
+      id,
+      light,
+      onClick,
+      placeholder,
+      type,
+      forwardRef,
+      onChange,
+      hideLabel,
+      invalid,
+      labelText,
+      invalidText,
+      helperText,
+      ...other
+    } = this.props;
+    return other;
+  }
 
-  return (
-    <div className={`${prefix}--form-item`}>
-      {label}
-      {helper}
-      {input}
-      {error}
-    </div>
-  );
-};
+  getTextInputProps() {
+    const {
+      className = `${prefix}--text__input`,
+      disabled,
+      id,
+      light,
+      onClick,
+      onChange,
+      placeholder,
+      type,
+      forwardRef: ref,
+    } = this.props;
+
+    const textInputClasses = classNames(`${prefix}--text-input`, className, {
+      [`${prefix}--text-input--light`]: light,
+    });
+
+    return {
+      className: textInputClasses,
+      id,
+      onChange: evt => {
+        if (!disabled) {
+          onChange(evt);
+        }
+      },
+      onClick: evt => {
+        if (!disabled) {
+          onClick(evt);
+        }
+      },
+      placeholder,
+      ref,
+      type,
+    };
+  }
+
+  getErrorId(id) {
+    return `${id}-error-msg`;
+  }
+
+  getError() {
+    const {
+      id,
+      invalid,
+      invalidText,
+    } = this.props;
+    const errorId = this.getErrorId(id);
+
+    return invalid ? (
+      <div className={`${prefix}--form-requirement`} id={errorId}>
+        {invalidText}
+      </div>
+    ) : null;
+  }
+
+  getErrorProps() {
+    const {
+      invalid,
+      id,
+    } = this.props;
+    const errorId = this.getErrorId(id);
+
+    return invalid ? {
+      'aria-invalid': true,
+      'data-invalid': true,
+      'aria-describedby': errorId,
+    } : {};
+  }
+
+  getLabel() {
+    const {
+      id,
+      hideLabel,
+      labelText,
+    } = this.props;
+
+    const labelClasses = classNames(`${prefix}--label`, {
+      [`${prefix}--visually-hidden`]: hideLabel,
+    });
+
+    return labelText ? (
+      <label htmlFor={id} className={labelClasses}>
+        {labelText}
+      </label>
+    ) : null;
+  }
+
+  getHelper() {
+    const {
+      helperText,
+    } = this.props;
+
+    return helperText ? (
+      <div className={`${prefix}--form__helper-text`}>{helperText}</div>
+    ) : null;
+  }
+
+  render() {
+    const label = this.getLabel();
+    const input = this.getInput();
+    const error = this.getError();
+    const helper = this.getHelper();
+
+    return (
+      <div className={`${prefix}--form-item`}>
+        {label}
+        {helper}
+        {input}
+        {error}
+      </div>
+    );
+  }
+}
 
 TextInput.propTypes = {
   /**
@@ -170,6 +238,11 @@ TextInput.propTypes = {
    * `true` to use the light version.
    */
   light: PropTypes.bool,
+
+  /**
+   *
+   */
+  forwardRef: PropTypes.shape({ current: PropTypes.instanceOf(React.Element) }),
 };
 
 TextInput.defaultProps = {
@@ -183,6 +256,14 @@ TextInput.defaultProps = {
   light: false,
 };
 
-export default React.forwardRef((props, ref) => (
+TextInput.displayName = 'TextInput';
+
+export const TextInputComponent = TextInput;
+
+const forwardRef = (props, ref) => (
   <TextInput {...props} forwardRef={ref} />
-));
+);
+
+forwardRef.displayName = TextInput.displayName;
+
+export default React.forwardRef(forwardRef);

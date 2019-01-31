@@ -65,6 +65,7 @@ export {
 export RadioButton from './components/RadioButton';
 export RadioButtonGroup from './components/RadioButtonGroup';
 export Search from './components/Search';
+export SearchTextInput from './components/SearchTextInput';
 export SearchFilterButton from './components/SearchFilterButton';
 export SearchLayoutButton from './components/SearchLayoutButton';
 export SecondaryButton from './components/SecondaryButton';
@@ -134,6 +135,7 @@ export NumberInputSkeleton from './components/NumberInput/NumberInput.Skeleton';
 export ProgressIndicatorSkeleton from './components/ProgressIndicator/ProgressIndicator.Skeleton';
 export RadioButtonSkeleton from './components/RadioButton/RadioButton.Skeleton';
 export SearchSkeleton from './components/Search/Search.Skeleton';
+export SearchTextInputSkeleton from './components/SearchTextInput/SearchTextInput.Skeleton';
 export SelectSkeleton from './components/Select/Select.Skeleton';
 export SliderSkeleton from './components/Slider/Slider.Skeleton';
 export StructuredListSkeleton from './components/StructuredList/StructuredList.Skeleton';
