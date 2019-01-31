@@ -5,6 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export * from './TextInput.Skeleton';
-export * from './TextInput';
-export default from './TextInput';
+export * from './SearchTextInput';
+export * from './SearchTextInput.Skeleton';
+export default from './SearchTextInput';
